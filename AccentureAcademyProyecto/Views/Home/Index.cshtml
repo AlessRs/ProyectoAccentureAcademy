@@ -1,0 +1,109 @@
+﻿@using AccentureAcademyProyecto.Models;
+@model IEnumerable<Libro>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/Content/AccAcPr.css" />
+    <title>Proyecto Accenture</title>
+</head>
+<body>
+    <header>
+        <div id="headerTitle">
+            <h1>AccentureAcademy</h1>
+            <h2>Proyecto</h2>
+            <a href="~/Home/AgregarElementosEjemplo/"> agregar ejemplos</a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#/View/Home/Index">Libros</a></li>
+                <li><a href="#">Autores</a></li>
+                <li><a href="#~/Editoriales/Index.cshtml">Editoriales</a></li>
+                <li><a href="#">Generos</a></li>
+            </ul>
+        </nav>
+        <form id="searchForm">
+            <input name="PalabraClave" type="search" placeholder="Escriba las palabras claves" /><button id="SearchButton" type="button" onclick="Buscar()"><img src="~/Images/search.png" /></button>
+            <div id="busqueda-avanzada-boton"> <img class="icono-chico" src="~/Images/drop-down.png" />Busqueda avanzada</div>
+            <div class="busqueda-avanzada-contenido">
+                <input name="searchTitulo" type="search" placeholder="Titulo" />
+                <input name="searchAutor" type="search" placeholder="Autor" />
+                <input name="searchEditorial" type="search" placeholder="Editorial" />
+                <input name="searchISBN" type="search" placeholder="ISBN" />
+                <input name="searchGenero" type="search" placeholder="Genero" />
+                <input name="searchEdicion" type="search" placeholder="Edicion" />
+            </div>
+        </form>
+    </header>
+    <section>
+        <aside>
+            <div id="command-buttons">
+                <button type="button" id="add" onclick="Agregar()"><img src="~/Images/add.png" /></button>
+                <button type="button" id="edit" onclick="Editar()"><img src="~/Images/edit.png"></button>
+                <button type="button" id="delete" onclick="Borrar()"><img src="~/Images/delete.png"></button>
+            </div>
+            <form id="asideForm" method="post">
+                <input name="Id" type="text" style="display:none" />
+                <label for="Titulo">Titulo</label>
+                <input name="Titulo" type="text" />
+                <label for="Autor">Autor/es</label><span class="ayuda"><img class="icono-chico" src="~/Images/info.png" /><div class="informacion">Para agregar multiples autores separelos con comas</div></span>
+                <input id="Autor" name="Autor" type="text" />
+                <div id="errorAutor" class="informacion">Para agregar multiples editoriales separelos con comas</div>
+                <label for="Editorial">Editorial</label><span class="ayuda"><img class="icono-chico" src="~/Images/info.png" /><div class="informacion">Para agregar multiples editoriales separelos con comas</div></span>
+                <input id="Editorial" name="Editorial" type="text" />
+                <div id="errorEditorial" class="informacion">Para agregar multiples editoriales separelos con comas</div>
+                <label for="ISBN">ISBN</label>
+                <input name="ISBN" type="text" />
+                <label for="Genero">Genero</label>
+                <input type="text" name="Genero" list="Genero" />
+                <datalist id="Genero">
+                    @foreach (var gen in ViewBag.ListaGeneros)
+                    {
+                        <option>@gen.Nombre</option>
+                    }
+                </datalist>
+                <label for="Edicion">Edicion</label>
+                <input name="Edicion" type="text" />
+            </form>
+        </aside>
+        <main>
+            <table>
+                <thead>
+                    <tr class="seleccionado">
+                        <th>Id</th>
+                        <th>Titulo</th>
+                        <th>Autor</th>
+                        <th>Editorial</th>
+                        <th>ISBN</th>
+                        <th>Genero</th>
+                        <th>Edicion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var libro in this.Model)
+                    {
+                        <tr>
+                            <td>@libro.Id</td>
+                            <td>@libro.Titulo</td>
+                            <td>@libro.Autores.Aggregate("", (res, autor) => res + autor.Nombre + ", ", res => res.Substring(0, res.Length - 2))</td>
+                            <td>@libro.Editoriales.Aggregate("", (res, editorial) => res + editorial.Nombre + ", ", res => res.Substring(0, res.Length - 2))</td>
+                            <td>@libro.ISBN</td>
+                            <td>@libro.Genero.Nombre</td>
+                            <td>@libro.Edicion</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <script>
+
+            </script>
+        </main>
+    </section>
+    <script src="~/Scripts/AccAcPr.js"></script>
+</body>
+</html>
